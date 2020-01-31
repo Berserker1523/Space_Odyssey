@@ -927,7 +927,7 @@ function create_space_ship(gl, programInfo, colliderProgramInfo) {
     programInfo,
     positions,
     movement_function,
-    null,
+    collider,
     can_disappear,
     life_time,
     primitive,
