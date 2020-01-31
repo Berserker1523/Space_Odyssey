@@ -13,16 +13,27 @@ canvas {
   z-index: -1
 }
 
-.title{
-  font-size: 1.1em;
-}
-
 #pause{
   margin-left: 75%;
 }
 
+.title{
+  font-size: 1.1em;
+}
+
 .panel{
-  height: 400px;
+  height:  450px;
+  width: 500px;
+  background-color: rgba(100,100,100, 1);
+  border-radius: 20px;
+  position: relative;
+  left: 33%;
+  text-align: center;
+  padding-top: 20px;
+}
+
+.panel2{
+  height:  150px;
   width: 500px;
   background-color: rgba(100,100,100, 1);
   border-radius: 20px;

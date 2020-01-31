@@ -2,6 +2,8 @@
 ("use strict");
 const btn = document.getElementById("pause");
 btn.onclick = pause;
+const btnPause = document.getElementById("pauseButton");
+btnPause.onclick = pause;
 const puntaje = document.getElementById("puntaje");
 const pausePanel = document.getElementById("panel");
 pausePanel.hidden = false;
@@ -333,10 +335,33 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 //Main returns render method for call it from different places, e.g. after all textures where loaded
-const $render = main();
+let $render = main();
+let $proc_id = null;
 
 //If debug, allow play without textures
-if ($DEBUG) requestAnimationFrame($render);
+if ($DEBUG) $proc_id = requestAnimationFrame($render);
+
+function new_game(){
+  $entitys_to_draw = [];
+  $entitys_to_draw_copy = [];
+  $pause = true;
+  $perdio = false;
+  $level = 0;
+  $must_create_right_bg = false;
+  $vel_space_ship = [200, 200];
+  $vel_bullet = [300, 0];
+  $vel_asteroid = [$VEL_ASTEROID, 0];
+  $vel_space = [$VEL_SPACE, 0];
+  $current_obj_id = 0;
+  $foe_spam_time_min = $FOE_SPAM_TIME_MIN_INIT;
+  $foe_spam = 0;
+  $bullet_spam = 0;
+  cancelAnimationFrame($proc_id);
+
+  $render = main();
+  console.log("asdasdasda");
+  $proc_id = requestAnimationFrame($render);
+}
 
 function main() {
   // Get A WebGL context
@@ -476,8 +501,10 @@ function main() {
   let then = 0;
   //----------------------- MAIN Loop -----------------------------------------------
   const render = function(now) {
+    console.log("jghjghgkjg");
     //Do nothing if game is paused
     if (!$pause && !$perdio) {
+      console.log("nmvbxncmxc");
       // Convert the time to seconds
       now *= 0.001;
 
@@ -492,7 +519,7 @@ function main() {
       then = now;
 
       //Increment the level
-      $level = now / 1;
+      $level += deltaTime / 1;
       puntaje.innerHTML = "Tiempo: " + Math.floor( $level );
       //depending on level
       increase_velocity();
@@ -509,7 +536,7 @@ function main() {
       //draw all entitys
       drawScene(gl, programTextureInfo, programColliderInfo, deltaTime);
     }
-    requestAnimationFrame(render);
+    $proc_id = requestAnimationFrame(render);
   };
 
   return render;
@@ -767,7 +794,11 @@ function destroy_object(element) {
       $perdio=true;
       endPanel.hidden = false;
       document.getElementById("puntajeFin").innerHTML="Puntaje: " + Math.floor( $level );;
-
+      setTimeout(() => {
+        endPanel.hidden = true;
+        pausePanel.hidden = false;
+        new_game();
+      }, 2000);
     }, 5000);
     $space_ship_explosion.play();
     $space_ship_explosion = new Audio(
@@ -896,7 +927,7 @@ function create_space_ship(gl, programInfo, colliderProgramInfo) {
     programInfo,
     positions,
     movement_function,
-    collider,
+    null,
     can_disappear,
     life_time,
     primitive,
@@ -1256,7 +1287,7 @@ function loadTextures(gl, images, textures) {
     );
     gl.generateMipmap(gl.TEXTURE_2D);
   });
-  if (!$DEBUG) requestAnimationFrame($render);
+  if (!$DEBUG) $proc_id = requestAnimationFrame($render);
 }
 
 function loadImage(url, callback) {
