@@ -35,6 +35,8 @@ Basic shot em' up. Consist in dodge asteroids that can increase their velocity w
 
 * Object creatment decoupling	
 
+* Render only if all textures where loaded
+
 ## Usage
 * Open index.html and play
 * For debug set $DEBUG=true in space-odyssey.js, that will show each element collider and console logs
