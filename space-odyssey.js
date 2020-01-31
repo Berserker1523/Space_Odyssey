@@ -542,12 +542,6 @@ function main() {
   return render;
 }
 
-//change pause
-function pause() {
-  $pause = !$pause;
-  pausePanel.hidden = !pausePanel.hidden;
-}
-
 function drawScene(gl, programTextureInfo, programColliderInfo, deltaTime) {
   const resized = resizeCanvasToDisplaySize(gl.canvas);
 
@@ -661,6 +655,21 @@ function draw_collider(gl, programInfo, element, projection_matrix) {
   }
 }
 
+//---------------------  Logic ----------------------------------------
+function generate_random_asteroid(gl, programInfo, colliderProgramInfo) {
+  //generates random asteroid after certain time
+  if (
+    $foe_spam >=
+    Math.random() * ($FOE_SPAM_TIME_MAX - $foe_spam_time_min) +
+      $foe_spam_time_min
+  ) {
+    $foe_spam = 0;
+    $entitys_to_draw_copy.push(
+      create_asteroid(gl, programInfo, colliderProgramInfo)
+    );
+  }
+}
+
 function manage_life_time(entity, deltaTime) {
   if ($DEBUG) {
     console.log("manage_life_time: ");
@@ -690,6 +699,7 @@ function manage_life_time(entity, deltaTime) {
 
   return false;
 }
+
 
 function manage_collisions(gl, programInfo, entity) {
   if ($DEBUG) {
@@ -741,72 +751,6 @@ function manage_collisions(gl, programInfo, entity) {
   return collision;
 }
 
-function increase_velocity() {
-  //increase velocity according to the level
-  $vel_asteroid[0] = $VEL_ASTEROID - $level;
-  $vel_space[0] = $VEL_SPACE - $level;
-  $foe_spam_time_min =
-    $foe_spam_time_min > 0.2 ? -$level + $FOE_SPAM_TIME_MIN_INIT : 0.2;
-  return $level;
-}
-
-function generate_random_asteroid(gl, programInfo, colliderProgramInfo) {
-  //generates random asteroid after certain time
-  if (
-    $foe_spam >=
-    Math.random() * ($FOE_SPAM_TIME_MAX - $foe_spam_time_min) +
-      $foe_spam_time_min
-  ) {
-    $foe_spam = 0;
-    $entitys_to_draw_copy.push(
-      create_asteroid(gl, programInfo, colliderProgramInfo)
-    );
-  }
-}
-
-function resize_background(gl, programInfo, prev_bg, canvas_resized) {
-  //resize bg entity
-  if (canvas_resized) {
-    destroy_object(prev_bg);
-    $entitys_to_draw_copy.unshift(create_background(gl, programInfo));
-    if ($DEBUG) console.log("bg resized by canvas resize");
-  }
-  //teletransport bgs for movement animation
-  else if (prev_bg.matrix[6] <= -gl.canvas.clientWidth) {
-    mat3.translate(prev_bg.matrix, prev_bg.matrix, [
-      gl.canvas.clientWidth * 2,
-      0
-    ]);
-    if ($DEBUG) console.log("bg translated");
-  }
-}
-
-function destroy_object(element) {
-  //find it object index and remove
-  let element_index = $entitys_to_draw_copy.findIndex(
-    object => object.id === element.id
-  );
-  $entitys_to_draw_copy.splice(element_index, 1);
-
-  //plays audio if ship
-  if (element.object_type === "space_ship") {
-    setTimeout(()=>{
-      $perdio=true;
-      endPanel.hidden = false;
-      document.getElementById("puntajeFin").innerHTML="Puntaje: " + Math.floor( $level );;
-      setTimeout(() => {
-        endPanel.hidden = true;
-        pausePanel.hidden = false;
-        new_game();
-      }, 2000);
-    }, 5000);
-    $space_ship_explosion.play();
-    $space_ship_explosion = new Audio(
-      "https://freesound.org/data/previews/235/235968_4265427-lq.mp3"
-    );
-  }
-}
-
 function detect_collision(element1, element2) {
   if ($DEBUG) {
     console.log("detect_collision: ");
@@ -847,6 +791,64 @@ function detect_collision(element1, element2) {
     return true;
   } else {
     return false;
+  }
+}
+
+function destroy_object(element) {
+  //find it object index and remove
+  let element_index = $entitys_to_draw_copy.findIndex(
+    object => object.id === element.id
+  );
+  $entitys_to_draw_copy.splice(element_index, 1);
+
+  //plays audio if ship
+  if (element.object_type === "space_ship") {
+    setTimeout(()=>{
+      $perdio=true;
+      endPanel.hidden = false;
+      document.getElementById("puntajeFin").innerHTML="Puntaje: " + Math.floor( $level );;
+      setTimeout(() => {
+        endPanel.hidden = true;
+        pausePanel.hidden = false;
+        new_game();
+      }, 2000);
+    }, 5000);
+    $space_ship_explosion.play();
+    $space_ship_explosion = new Audio(
+      "https://freesound.org/data/previews/235/235968_4265427-lq.mp3"
+    );
+  }
+}
+
+function increase_velocity() {
+  //increase velocity according to the level
+  $vel_asteroid[0] = $VEL_ASTEROID - $level;
+  $vel_space[0] = $VEL_SPACE - $level;
+  $foe_spam_time_min =
+    $foe_spam_time_min > 0.2 ? -$level + $FOE_SPAM_TIME_MIN_INIT : 0.2;
+  return $level;
+}
+
+//change pause
+function pause() {
+  $pause = !$pause;
+  pausePanel.hidden = !pausePanel.hidden;
+}
+
+function resize_background(gl, programInfo, prev_bg, canvas_resized) {
+  //resize bg entity
+  if (canvas_resized) {
+    destroy_object(prev_bg);
+    $entitys_to_draw_copy.unshift(create_background(gl, programInfo));
+    if ($DEBUG) console.log("bg resized by canvas resize");
+  }
+  //teletransport bgs for movement animation
+  else if (prev_bg.matrix[6] <= -gl.canvas.clientWidth) {
+    mat3.translate(prev_bg.matrix, prev_bg.matrix, [
+      gl.canvas.clientWidth * 2,
+      0
+    ]);
+    if ($DEBUG) console.log("bg translated");
   }
 }
 
