@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Space Cowboy</title>
+  <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+
+  <canvas id="canvas"></canvas>
+  <div class="container-fluid">
+    <div class="row">
+    <div class="col">
+      <p id="puntaje">Tiempo: </p>
+    </div>
+    <div class="col">
+      <button id="pause" class="btn btn-warning">&#10074;&#10074;</button>
+    </div>
+    </div>
+  </div>
+  <div id="panel" class="panel">
+    <p class="title">Intrucciones </p>
+    <p class="inst">Muévete con las flechas del teclado y dispara con la tecla x</p>
+    <div class="story">
+    <p>
+              A mitad de camino nuestra nave se averió, ahora no podemos
+              frenarla, acelera infinitamente.
+            </p>
+            <p>
+              No tenemos como arreglarla, pero no perderemos la esperanza de un
+              milagro, sobreviviremos lo máximo que podamos.
+            </p>
+            </div>
+  </div>
+
+  <div id="end" class="panel">
+    <p class="title">Fin del Juego </p>
+    <p id="puntajeFin" class="inst">Puntaje: </p>
+  </div>
+
+
+  <script src="https://rawgit.com/mdn/webgl-examples/gh-pages/tutorial/gl-matrix.js"></script>
+  <script type="text/javascript" src="space-cowboy.js"></script>
+
+</body>
+</html>
