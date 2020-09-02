@@ -45,3 +45,10 @@ Basic shot em' up. Consist in dodge asteroids that can increase their velocity w
 ## Technologies
 * WebGl
 * gl-matrix
+
+
+## Credits
+# Audio:
+* Bullet: https://freesound.org/people/MikeE63/sounds/466834/
+* Asteroid explosion: https://freesound.org/people/Quaker540/sounds/245372/
+* Space ship explosion: https://freesound.org/people/tommccann/sounds/235968/
