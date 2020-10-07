@@ -53,4 +53,8 @@ Basic shot em' up. Consist in dodge asteroids that can increase their velocity w
 * Asteroid explosion: https://freesound.org/people/Quaker540/sounds/245372/
 * Space ship explosion: https://freesound.org/people/tommccann/sounds/235968/
 ### Textures:
-
+* Asteroid: https://opengameart.org/content/brown-asteroid
+* Bullet: https://opengameart.org/sites/default/files/spr_bullet_strip02.png
+* Spaceship:
+* Background:
+* Explosion animation:
